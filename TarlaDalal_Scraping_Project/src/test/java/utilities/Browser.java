@@ -23,7 +23,7 @@ public class Browser {
 
 	public WebDriver driver;
 	
-	
+	String url= "https://www.tarladalal.com";
 	@BeforeTest
 	public void openBrowser() {
 				
@@ -43,7 +43,13 @@ public class Browser {
 		
 		
 	}
-	
+	@Test
+	public void openurl() throws InterruptedException {
+		
+		driver.get(url);
+		
+		
+	}
 	
 	//@AfterTest
 	public void closeDriver() {
