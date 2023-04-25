@@ -81,7 +81,7 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 		targetmorbidcondition= driver.findElement(By.xpath("//span[@id='ctl00_cntleftpanel_lblSearchTerm']//span//h1")).getText();
 		System.out.println("Target Morbid Condition :"+targetmorbidcondition);
 				
-		for(i=2;i<=pageCount+1 ;i++) {
+		for(i=2;i<=pageCount;i++) {
 			for(cre=1;cre<=size;cre++)
 			{
 				rc=driver.findElement(By.xpath("//article[@class='rcc_recipecard']["+cre+"]//a[@itemprop='url']"));
@@ -176,9 +176,9 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 		
 		String RecURL=null;
 		try {
-			WebElement NutritionValue= driver.findElement(By.xpath("//span[@itemprop='nutrition']"));
+			WebElement NutritionValue= driver.findElement(By.xpath("//*[@id='rcpnuts']"));
 			RecURL = driver.getCurrentUrl();
-			if(NutritionValue.isDisplayed())
+			if(NutritionValue.isDisplayed())   //*[@id=\"rcpnuts\"]   //span[@itemprop='nutrition']
 			{
 				NitriValue.add(NutritionValue.getText());	
 			}
