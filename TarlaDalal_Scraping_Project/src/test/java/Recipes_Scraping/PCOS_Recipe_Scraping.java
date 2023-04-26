@@ -81,7 +81,7 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 		targetmorbidcondition= driver.findElement(By.xpath("//span[@id='ctl00_cntleftpanel_lblSearchTerm']//span//h1")).getText();
 		System.out.println("Target Morbid Condition :"+targetmorbidcondition);
 				
-		for(i=2;i<=pageCount;i++) {
+		for(i=2;i<=pageCount+1;i++) {
 			for(cre=1;cre<=size;cre++)
 			{
 				rc=driver.findElement(By.xpath("//article[@class='rcc_recipecard']["+cre+"]//a[@itemprop='url']"));
@@ -89,11 +89,9 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 				recipeid=driver.findElement(By.xpath("//article[@class='rcc_recipecard']["+cre+"]//div[@class='rcc_rcpno']//span[contains(text(),'Recipe')]"));
 				recid.add(recipeid.getText());
 			int recidSize=driver.findElements(By.xpath("//article[@class='rcc_recipecard'][\"+cre+\"]//div[@class='rcc_rcpno']//span[contains(text(),'Recipe')]")).size();
-			System.out.println("Recid size"+recidSize);
 			rc.click();
 			checkElimination();
 			//reciepDetails();
-			toAddRecipeDetails();
 			recid.clear();
 			rcname.clear();
 			preptime.clear();
@@ -134,6 +132,8 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 		{
 			
 			reciepDetails();
+			toAddRecipeDetails();
+			
 		}else {
 			System.out.println("***************************************************************************");
 			System.out.println("Eliminated ingredient found/This recipe not suitable for PCOS :"+Arrays.toString(dupList.toArray()));
@@ -166,7 +166,7 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 12, 0, "Recipe URL");
 						
 		System.out.println("Writeexcel row count Eliminate ingredieny sheet"+Writerowcount);
-		
+		 
 		WebElement preperationtime=driver.findElement(By.xpath("//time[@itemprop='prepTime']"));
 		preptime.add(preperationtime.getText());
 		WebElement cookingtime=driver.findElement(By.xpath("//time[@itemprop='cookTime']"));
@@ -199,10 +199,19 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 4, ta, recCat.name());
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 5, ta, cat.name());
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 6, ta, ingd);
-		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 7, ta, preptime.get(0));
+		if(preptime.size()>0) {
+			recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 7, ta, preptime.get(0));
+		}else {
+			recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 7, ta, "NA");
+		}
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 8, ta, cooktime.get(0));
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 9, ta, PrepMethod.get(0));
-		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 10, ta, NitriValue.get(0));
+		if(NitriValue.size()>0) {
+			recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 10, ta, NitriValue.get(0));
+		}else {
+			recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 10, ta, "NA");
+			
+		}
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 11, ta, targetmorbidcondition);
 		recipedetailsreader.setCellData("PCOS_Eliminated_Recipe_Data", 12, ta, RecURL);
 		System.out.println("End inside for loop");
@@ -260,10 +269,18 @@ WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPE
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 4, we, recCat.name());
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 5, we, cat.name());
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 6, we, ingd);
-			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 7, we, preptime.get(0));
+			if(preptime.size()>0) {
+				recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 7, we, preptime.get(0));
+			}else {
+				recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 7, we, "NA");
+			}
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 8, we, cooktime.get(0));
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 9, we, PrepMethod.get(0));
+			if(NitriValue.size()>0) {
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 10, we, NitriValue.get(0));
+			}else {
+				recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 10, we,"NA");
+			}
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 11, we, targetmorbidcondition);
 			recipedetailsreader.setCellData("PCOS_ToAdd_Recipe_Data", 12, we, RecURL);
 			System.out.println("End inside for loop for Add to Ingredients");
