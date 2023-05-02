@@ -1,32 +1,21 @@
 package utilities;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Browser {
 
-	public WebDriver driver;
-	
-	String url= "https://www.tarladalal.com";
-	@BeforeTest
-	public void openBrowser() {
-				
+	public static  WebDriver driver;
+	static String url= "https://www.tarladalal.com";
+	public static void openBrowser()
+	{
+	//public WebDriver driver;
 			ChromeOptions ops = new ChromeOptions();
 			
 			WebDriverManager.chromedriver().setup();
@@ -39,23 +28,7 @@ public class Browser {
 				
 			driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
 			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
-		
-		
-	}
-	@Test
-	public void openurl() throws InterruptedException {
-		
-		driver.get(url);
-		
-		
-	}
-	
-	//@AfterTest
-	public void closeDriver() {
-		
-		driver.quit();
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+			driver.get(url);
 	}
 }
-
-

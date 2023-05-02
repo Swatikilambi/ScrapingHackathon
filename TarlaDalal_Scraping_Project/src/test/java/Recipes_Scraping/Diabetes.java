@@ -16,14 +16,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
-import com.numpyninja.taraladala.Recipe.categories.RecipeCategory;
+import com.numpyninja.taraladala.food.categories.RecipeCategory;
 import com.numpyninja.taraladala.food.categories.FoodCategory;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import utilities.XLUtility;
+import utilities.Browser;
 
-
-public class Diabetes {
+public class Diabetes  extends Browser {
 	
 	static String ingredientDivs;
 	static String Ingredient;
@@ -33,49 +33,13 @@ public class Diabetes {
 	static boolean isIngFoundInElList;
 	
 	
-public static void main(String[] args) throws InterruptedException, IOException
+public static void main(String[] args)  throws InterruptedException, IOException
 {
-	
-	
-	String path=System.getProperty("user.dir");
-	System.setProperty("webdriver.chrome.driver", path+"/src/test/resources/Drivers/chromedriver.exe");
-	
-	WebDriverManager.chromedriver().setup();
-	WebDriver driver=new ChromeDriver();
-	
-	driver.get("http://www.tarladalal.com");
-	
-	
-	driver.manage().window().maximize();
-	Thread.sleep(1000);
-	
+	openBrowser();
 	WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPES')]"));
-	
 	recipies.click();
-	
-	
-	
-	Thread.sleep(1000);
-	
-	
-	Thread.sleep(2000);
-	
-	//JavascriptExecutor js=(JavascriptExecutor)driver;
-	
-	////a[@id='ctl00_cntleftpanel_ttlhealthtree_tvTtlHealtht70'] //Diabetic xpath
-	////*[@id=\"ctl00_cntleftpanel_cattreecuisine_tvCuisinet28\"] //Indian xpath
-	
 	WebElement diabeticrecipes = driver.findElement(By.xpath("//a[@id='ctl00_cntleftpanel_ttlhealthtree_tvTtlHealtht70']"));
-	
-	//Actions act=new Actions(driver);
-	//act.moveToElement(diabeticrecipes).click();
-	//js.executeScript("arguments[0].scrollIntoView();", diabeticrecipes);
 	diabeticrecipes.click();
-	
-	//labels = driver.findElement(By.xpath("//div[@id='show_breadcrumb']")).getText();
-	
-	
-	
 	
 	// Read from excel and populate LinkedList
 	List<String> diabeticEliminateSet = new LinkedList<String>();
@@ -134,8 +98,6 @@ public static void main(String[] args) throws InterruptedException, IOException
 	
 	XLUtility xlutil=new XLUtility(xlpath);
 	
-	
-	
 	//Write headers in excel sheet
 	xlutil.setCellData("Diabeties_EliminationList", 0, 0, "Recipe ID");
 	xlutil.setCellData("Diabeties_EliminationList", 0, 1, "Recipe Name");
@@ -176,10 +138,7 @@ public static void main(String[] args) throws InterruptedException, IOException
 	Thread.sleep(2000);
 	int	sizePagination = driver.findElements(By.xpath("//*[@id=\"pagination\"]/a")).size();
 	System.out.println("No of Page" +sizePagination);
-	
- 
-    //List<WebElement> noofrecipes=driver.findElements(By.xpath("//div[2]//article[@class='rcc_recipecard']"));
-    //System.out.println(noofrecipes);
+
 	int noofrecipes=driver.findElements(By.xpath("//div[2]//article[@class='rcc_recipecard']")).size();
 	System.out.println("No of Recipe" +noofrecipes);
 	
@@ -205,9 +164,6 @@ public static void main(String[] args) throws InterruptedException, IOException
 			
 			Thread.sleep(1000);
 			System.out.println(recID.size());
-			//System.out.println(recName.size());
-			
-				
 			recipeName.click();
 			
 			labels = driver.findElement(By.xpath("//div[@id='show_breadcrumb']")).getText();
@@ -235,22 +191,13 @@ public static void main(String[] args) throws InterruptedException, IOException
 			System.out.println("ingredientDivs Size: " + ingredientDivs.size());
 			for(int ing=0;ing<ingredientDivs.size();ing++)
 			{
-				//if(isIngFoundInElList) {
-				//	break;
-					//driver.navigate().back();  
-				//}
 				WebElement ingDiv = ingredientDivs.get(ing);
 				String ingredientText = ingDiv.getText();
 				System.out.println("Ing Div Text: " + ingDiv.getText());
-				////*[@id="rcpinglist"]/div/span[3]/a
-				//String ingredientText =  driver.findElement(By.xpath("//*[@id='rcpinglist']/div/span["+ing+"]/a/span")).getText();
-				//System.out.println("Ing Text: " + ingredientText);
 				for(int x=0;x<diabeticEliminateSet.size();x++) {
 					if(ingredientText.toLowerCase().contains(diabeticEliminateSet.get(x).toLowerCase())) {
 						isIngFoundInElList = true;
 						break;
-						//driver.navigate().back();  
-						//System.out.println("Skipping current recipe. " );
 					}
 				
 				}
@@ -262,8 +209,6 @@ public static void main(String[] args) throws InterruptedException, IOException
 					if(ingredientText.toLowerCase().contains(diabeticToAddSet.get(x).toLowerCase())) {
 						isIngFoundInAddList = true;
 						break;
-						//driver.navigate().back();  
-						//System.out.println("Skipping current recipe. " );
 					}
 				
 				}
@@ -276,7 +221,7 @@ public static void main(String[] args) throws InterruptedException, IOException
 			if(isIngFoundInElList) 
 			{
 				System.out.println("******************Skipping current recipe.***************** " +recName);
-				//continue;
+				
 			}
 			else 
 			{
@@ -315,7 +260,6 @@ public static void main(String[] args) throws InterruptedException, IOException
 				}
 				else 
 				{
-					
 					k++;
 					
 					FoodCategory cat=foodCategory();
@@ -352,21 +296,9 @@ public static void main(String[] args) throws InterruptedException, IOException
 		driver.findElement(By.xpath("//*[@id=\"pagination\"]/a["+i+"]")).click();
 		
 		
-	}
-	
-	
-	
+	}	
 }
 	public static FoodCategory foodCategory() {
-		//List<String> vegan=new ArrayList<>(Arrays.asList("Butter","Curd/Yogurt","Milk","Honey","Paneer","Egg","Ghee")); 
-		
-		
-		//Set<String> veganList=  vegan.stream().filter(a -> ingredientText.contains(a.toLowerCase())).collect(Collectors.toSet());
-		//List<String> veganList = new LinkedList<String>();
-		//if(ingredientText.toLowerCase().contains(veganList.get(x).toLowerCase())) 
-		
-		//if(ingredientDivs.contains("Egg"))
-			//return FoodCategory.EGGETAIRIAN;
 		 if ((labels.contains("jain")))
 			return FoodCategory.JAIN;
 		//if(veganList.size()!=0)

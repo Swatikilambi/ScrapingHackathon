@@ -15,45 +15,30 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.numpyninja.taraladala.food.categories.FoodCategory;
-import com.numpyninja.taraladala.Recipe.categories.RecipeCategory;
+import com.numpyninja.taraladala.food.categories.RecipeCategory;
 import utilities.ExcelSheetReader;
 import utilities.Recipe;
 import utilities.WritingExcel;
 import utilities.XLUtility;
 import io.github.bonigarcia.wdm.WebDriverManager;
-
-public class Hypertension_recipe_scrapping {
+import utilities.Browser;
+public class Hypertension_recipe_scrapping extends Browser {
 	static ExcelSheetReader ob = new ExcelSheetReader();
 	static WritingExcel ex = new WritingExcel();
 	Set<String> hyperTensionRecipes = new HashSet<String>();
 	static String labels;
     static HashSet<String> ingredientsSet = new HashSet<String>();
-
-
-
    
 	public static void main(String[] args) throws InterruptedException, IOException {
 		filterRecipes();
 	}
-	
 	public static void filterRecipes() throws IOException, InterruptedException {
 		String xlpath=".\\src\\test\\resources\\HypertensionRecipes.xlsx";
 		XLUtility xlutil=new XLUtility(xlpath);
 	    String ingredientText = null;
-			
-		String path=System.getProperty("user.dir");
-		System.setProperty("webdriver.edge.driver", path+"/src/test/resources/Drivers/chromedriver.exe");
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--remote-allow-origins=*");		
-		WebDriverManager.chromedriver().setup();
-		WebDriver driver=new ChromeDriver(options);		
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 		
-		driver.get("http://www.tarladalal.com");
-
-		Thread.sleep(1000);
-		
+	    openBrowser();
+				
 		WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPES')]"));
 		
 		recipies.click();
@@ -72,10 +57,7 @@ public class Hypertension_recipe_scrapping {
 		Set<String> hyperTensionToAddIngredients = ob.fileReader(".\\src\\test\\resources\\Hypertension_to_add.xlsx");
 
 		for(int i=1;i<=page;i++) {
-			Thread.sleep(100);
-
-			//driver.get("https://www.tarladalal.com/recipes-for-high-blood-pressure-644?pageindex="+i);
-			Thread.sleep(100);
+			
             int noofrecipes=driver.findElements(By.xpath("//article[@class='rcc_recipecard']")).size();
             System.out.println("No of Recipe" +noofrecipes);  
             

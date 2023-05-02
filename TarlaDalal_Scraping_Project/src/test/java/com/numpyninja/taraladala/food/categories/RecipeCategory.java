@@ -1,4 +1,4 @@
-package com.numpyninja.taraladala.Recipe.categories;
+package com.numpyninja.taraladala.food.categories;
 
 public enum RecipeCategory {
 

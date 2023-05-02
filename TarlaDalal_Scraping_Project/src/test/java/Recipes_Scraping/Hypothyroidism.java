@@ -10,13 +10,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import com.numpyninja.taraladala.Recipe.categories.RecipeCategory;
+import com.numpyninja.taraladala.food.categories.RecipeCategory;
 import com.numpyninja.taraladala.food.categories.FoodCategory;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import utilities.XLUtility;
+import utilities.Browser;
 
-public class Hypothyroidism {
+public class Hypothyroidism extends Browser {
 	
 	
 	static String ingredientDivs;
@@ -27,27 +28,12 @@ public class Hypothyroidism {
 	static boolean isIngFoundInElList;
 	public static void main(String[] args) throws InterruptedException, IOException {
 		
-		
-		String path=System.getProperty("user.dir");
-		System.setProperty("webdriver.chrome.driver", path+"/src/test/resources/Drivers/chromedriver.exe");
-		
-		WebDriverManager.chromedriver().setup();
-		WebDriver driver=new ChromeDriver();
-		
-		driver.get("http://www.tarladalal.com");
-		
-		
-		driver.manage().window().maximize();
-		Thread.sleep(1000);
+		openBrowser();
 		
 		WebElement recipies = driver.findElement(By.xpath("//div[contains(text(),'RECIPES')]"));
-		
 		recipies.click();
 		
-		Thread.sleep(1000);
-		
 		WebElement hypothyroidism = driver.findElement(By.xpath("//*[@id=\"ctl00_cntleftpanel_ttlhealthtree_tvTtlHealtht226\"]"));
-		
 		hypothyroidism .click();
 		
 		// Read from excel and populate LinkedList
@@ -83,7 +69,6 @@ public class Hypothyroidism {
 			hypotToAddSet.add("Brown rice"); 		hypotToAddSet.add("quinoa");
 			hypotToAddSet.add("Mushroom");
 			
-
 			String xlpath=".\\src\\test\\resources\\hyporecipe.xlsx";
 			XLUtility xlutil=new XLUtility(xlpath);
 			
@@ -124,16 +109,12 @@ public class Hypothyroidism {
 			List<String> Nutrientvalues=new ArrayList<String>();
 			List<String> RecURL=new ArrayList<String>();
 			
-			
-			
-			Thread.sleep(2000);
 			int	sizePagination = driver.findElements(By.xpath("//*[@id=\"pagination\"]/a")).size();
 			System.out.println("No of Page" +sizePagination);
 			
 			int noofrecipes=driver.findElements(By.xpath("//div[2]//article[@class='rcc_recipecard']")).size();
 			System.out.println("No of Recipe" +noofrecipes);
 			
-
 			int k = 0;
 			int l = 0;
 			
@@ -156,32 +137,23 @@ public class Hypothyroidism {
 					
 					Thread.sleep(1000);
 					System.out.println(recID.size());
-					//System.out.println(recName.size());
-					
 						
 					recipeName.click();
 					
 					labels = driver.findElement(By.xpath("//div[@id='show_breadcrumb']")).getText();
 					
-					Thread.sleep(1000);
 					WebElement preaptime=driver.findElement(By.xpath("//time[@itemprop='prepTime']"));
 					System.out.println(preaptime.getText());
 					PrepTime.add(driver.findElement(By.xpath("//time[@itemprop='prepTime']")).getText());
 					
-					Thread.sleep(1000);
 					WebElement cooktime=driver.findElement(By.xpath("//time[@itemprop='cookTime']"));
 					System.out.println(cooktime.getText());
 					CookTime.add(driver.findElement(By.xpath("//time[@itemprop='cookTime']")).getText());
 					
-					Thread.sleep(1000);
 					WebElement ingredient=driver.findElement(By.xpath("//*[@id=\"rcpinglist\"]"));
 					System.out.println(ingredient.getText());
 					Ingredient.add(driver.findElement(By.xpath("//*[@id=\"rcpinglist\"]")).getText());
-					
-					
-
-					Thread.sleep(1000);
-					
+			
 					List<WebElement> ingredientDivs = driver.findElements(By.xpath("//*[@id='rcpinglist']/div/span"));
 					Boolean isIngFoundInElList = false;  
 					Boolean isIngFoundInAddList = false;
@@ -268,12 +240,9 @@ public class Hypothyroidism {
 						}
 						else 
 						{
-							
 							k++;
 							FoodCategory cat=foodCategory();
 							RecipeCategory recCat= recipeCategory();
-							//for(int k=1;k<recID.size();k++)   //this is for getting 
-							//{
 							xlutil.setCellData("Hypothyroidism_EliminationList",k,0,recID.get(0));
 							xlutil.setCellData("Hypothyroidism_EliminationList",k,1, recName.get(0));
 							xlutil.setCellData("Hypothyroidism_EliminationList",k,2,recCat.name()) ;
@@ -296,32 +265,16 @@ public class Hypothyroidism {
 					 Method.clear();
 					 Nutrientvalues.clear();
 					 RecURL.clear();
-					 
-					 
 					 driver.navigate().back();
 				}
 				System.out.println("******************Pagination number.***************** " + i);
-				driver.findElement(By.xpath("//*[@id=\"pagination\"]/a["+i+"]")).click();
-				
-				
-			}
-			
-			
+				driver.findElement(By.xpath("//*[@id=\"pagination\"]/a["+i+"]")).click();	
+			}	
 		}
 	public static FoodCategory foodCategory() {
-		//List<String> vegan=new ArrayList<>(Arrays.asList("Butter","Curd/Yogurt","Milk","Honey","Paneer","Egg","Ghee")); 
 		
-		
-		//Set<String> veganList=  vegan.stream().filter(a -> ingredientText.contains(a.toLowerCase())).collect(Collectors.toSet());
-		//List<String> veganList = new LinkedList<String>();
-		//if(ingredientText.toLowerCase().contains(veganList.get(x).toLowerCase())) 
-		
-		//if(ingredientDivs.contains("Egg"))
-			//return FoodCategory.EGGETAIRIAN;
 		 if ((labels.contains("jain")))
 			return FoodCategory.JAIN;
-		//if(veganList.size()!=0)
-			//return FoodCategory.VEGAN;
 		else
 			return FoodCategory.VEGETAIRIAN;
 	}
